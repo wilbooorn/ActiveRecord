@@ -73,6 +73,7 @@ describe 'Associatable' do
       house = cat.home
 
       expect(house).to be_instance_of(House)
+      p house
       expect(house.address).to eq('26th and Guerrero')
     end
   end

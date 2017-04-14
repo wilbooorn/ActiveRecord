@@ -14,7 +14,7 @@ class AssocOptions
   end
 
   def table_name
-    "#{self.class_name}s".downcase
+    self.model_class.table_name
   end
 end
 
@@ -45,18 +45,24 @@ module Associatable
   def belongs_to(name, options = {})
     options = BelongsToOptions.new(name, options)
     define_method(name) do
-      foreign_key = options.send('foreign_key')
+      foreign_key = self.attributes["#{options.foreign_key}".to_sym]
       mclass = options.model_class
-      mclass.new
+      mclass.where(id: foreign_key).first
     end
+    self.assoc_options[name] = options
   end
 
   def has_many(name, options = {})
-    options = HasManyOptions.new(name, options)
+    options = HasManyOptions.new(name, self, options)
+    define_method("#{name}") do
+      primary_key = self.attributes[:id]
+      mclass = options.model_class
+      mclass.where(options.foreign_key => primary_key)
+    end
   end
 
   def assoc_options
-    # Wait to implement this in Phase IVa. Modify `belongs_to`, too.
+    @assoc_options ||= {}
   end
 end
 

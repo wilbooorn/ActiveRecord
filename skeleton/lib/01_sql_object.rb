@@ -33,7 +33,6 @@ class SQLObject
 
   def self.table_name
     @table_name ||= self.to_s.tableize
-    # ...
   end
 
   def self.all
@@ -67,7 +66,6 @@ class SQLObject
         raise("unknown attribute '#{k}'") unless self.class.columns.include?(k.to_sym)
         self.send("#{k.to_sym}=", v)
       end
-    # ...
   end
 
   def attributes
@@ -77,7 +75,6 @@ class SQLObject
 
   def attribute_values
     self.class.columns.map { |el| self.send("#{el}") }
-    # ...
   end
 
   def insert
