@@ -23,8 +23,7 @@ module Associatable
         WHERE
           #{through_table}.id = ?
       SQL
-      x = source_options.model_class.parse_all(data)
-      x[0]
+      x = source_options.model_class.parse_all(data).first
     end
   end
 end
